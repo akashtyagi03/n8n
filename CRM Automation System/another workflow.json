@@ -1,0 +1,1468 @@
+{
+  "name": "another workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "3786c9d8-b01c-448f-a328-f1291ebcf5c7",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -352,
+        -32
+      ],
+      "id": "77d186cd-8dc2-48f2-a754-391bddcc406f",
+      "name": "Webhook",
+      "webhookId": "3786c9d8-b01c-448f-a328-f1291ebcf5c7"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.email }}",
+        "subject": "=welcome to world academy,  {{ $json.body.firstname }}",
+        "emailType": "text",
+        "message": "=hey {{ $json.body.firstname }}, \nwelcome to the combat zone, click below to create your student id and start learning  [insert link]  thank you, world Team ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -128,
+        -32
+      ],
+      "id": "31530e91-6017-4b99-9185-8b07241682fe",
+      "name": "Send a message",
+      "webhookId": "f82b4e59-3909-43ab-8abd-5e93fa8ef1e8",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "onheqjW4YxVJ0gov",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0A7G2S8PM5",
+          "mode": "id"
+        },
+        "text": "=new student has paid on {{ $now.toFormat('yyyy-MM-dd HH:mm:ss') }}\n\n{{ $('Webhook').item.json.body.firstname }}\n{{ $('Webhook').item.json.body.lastname }} is being onboarding now...\n\n---------------------------------------------------------------------",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        96,
+        -32
+      ],
+      "id": "e547563b-f505-4bd5-b814-cb5bb0ca8840",
+      "name": "Send a message1",
+      "webhookId": "6cb99407-91a7-48d1-a073-59d9ec73f74a",
+      "credentials": {
+        "slackApi": {
+          "id": "MsGphb6lVcYcFQNM",
+          "name": "Slack account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8",
+          "mode": "list",
+          "cachedResultName": "CRM testing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full name": "={{ $('Webhook').item.json.body.firstname }}{{ $('Webhook').item.json.body.lastname }}",
+            "Email": "={{ $('Webhook').item.json.body.email }}",
+            "phn no. ": "={{ $('Webhook').item.json.body['ph no. '] }}",
+            "status": "account creation",
+            "payment date": "={{ $now.format('yyyy-MM-dd') }}",
+            "first follow up": "={{ $now.plus({ day: 3 }).format('yyyy-MM-dd') }}",
+            "human takeover": "={{ $now.plus({ day: 5 }).format('yyyy-MM-dd') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phn no. ",
+              "displayName": "phn no. ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "payment date",
+              "displayName": "payment date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "first follow up",
+              "displayName": "first follow up",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "human takeover",
+              "displayName": "human takeover",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        320,
+        -32
+      ],
+      "id": "7389de0f-1be3-4819-a3c0-dbc2313c7b8b",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "URFUUt3X63QeJpxB",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 14
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -352,
+        192
+      ],
+      "id": "c8829993-28a8-4698-9d71-3d95391ad3eb",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8",
+          "mode": "list",
+          "cachedResultName": "CRM testing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "status",
+              "lookupValue": "account creation"
+            },
+            {
+              "lookupColumn": "first follow up",
+              "lookupValue": "={{ $now.plus({day:3}).format('yyyy-MM-dd')}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -128,
+        192
+      ],
+      "id": "7db889ea-1901-4c13-a22a-9609b5d448f2",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "URFUUt3X63QeJpxB",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "don't forget to create your account",
+        "emailType": "text",
+        "message": "=hey  {{ $json['Full name'] }},\nyou don't create your create until now, please create that timely,\nthank you\nworld team.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        96,
+        192
+      ],
+      "id": "4c7a2458-a7a1-476e-b893-cf9438cace1a",
+      "name": "Send a message2",
+      "webhookId": "52efab95-0beb-4b46-9685-0ff456f7f036",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "onheqjW4YxVJ0gov",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8",
+          "mode": "list",
+          "cachedResultName": "CRM testing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "first follow up sent",
+            "Email": "={{ $('Get row(s) in sheet').item.json.Email }}",
+            "first follow up": "N/A"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "phn no. ",
+              "displayName": "phn no. ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "payment date",
+              "displayName": "payment date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "first follow up",
+              "displayName": "first follow up",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "human takeover",
+              "displayName": "human takeover",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        320,
+        192
+      ],
+      "id": "fad008ef-d16f-4134-ac4d-a6e3b43d81f7",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "URFUUt3X63QeJpxB",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 14
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -352,
+        416
+      ],
+      "id": "7d6ce5a4-c6a0-4304-a003-9fd054e0c3a3",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8",
+          "mode": "list",
+          "cachedResultName": "CRM testing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "status",
+              "lookupValue": "first follow up sent"
+            },
+            {
+              "lookupColumn": "human takeover",
+              "lookupValue": "={{ $now.plus({ day: 5 }).format('yyyy-MM-dd') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -128,
+        416
+      ],
+      "id": "3a349d55-3b9c-404d-80d0-ac861b08c2b5",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "URFUUt3X63QeJpxB",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0A7G2S8PM5",
+          "mode": "id"
+        },
+        "text": "=it has been 5 days since  {{ $json['Full name'] }} paid and they don't create account yet.\n\nplease reach out\n----------------------------------------",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        96,
+        416
+      ],
+      "id": "1447749f-74fd-4299-b498-4bff637ebfee",
+      "name": "Send a message3",
+      "webhookId": "cad3abb2-38eb-4b4d-99d5-faf9e6addb7c",
+      "credentials": {
+        "slackApi": {
+          "id": "MsGphb6lVcYcFQNM",
+          "name": "Slack account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8",
+          "mode": "list",
+          "cachedResultName": "CRM testing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Get row(s) in sheet1').item.json.Email }}",
+            "status": "human notified",
+            "human takeover": "n/a"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "phn no. ",
+              "displayName": "phn no. ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "payment date",
+              "displayName": "payment date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "first follow up",
+              "displayName": "first follow up",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "human takeover",
+              "displayName": "human takeover",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        320,
+        416
+      ],
+      "id": "56964f89-c298-4fd5-9d02-c91731b7b281",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "URFUUt3X63QeJpxB",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "world academy account creation",
+        "formDescription": "fill in the below details to get your account set up",
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "first name",
+              "fieldLabel": "First Name",
+              "placeholder": "enter your first name",
+              "requiredField": true
+            },
+            {
+              "fieldName": "last name",
+              "fieldLabel": "Last Name ",
+              "placeholder": "enter your name",
+              "requiredField": true
+            },
+            {
+              "fieldName": "Email address",
+              "fieldLabel": "Email address",
+              "requiredField": true
+            },
+            {
+              "fieldName": "phn no.",
+              "fieldLabel": "Phone number",
+              "placeholder": "enter your phone number",
+              "requiredField": true
+            },
+            {
+              "fieldName": "business name ",
+              "fieldLabel": "Business name ",
+              "placeholder": "enter your business name",
+              "requiredField": true
+            },
+            {
+              "fieldName": "team size",
+              "fieldLabel": "Team size",
+              "placeholder": "what is your team size",
+              "requiredField": true
+            },
+            {
+              "fieldName": "main goal for joining",
+              "fieldLabel": "Main goal for joining",
+              "placeholder": "enter your goal",
+              "requiredField": true
+            },
+            {
+              "fieldName": "desired outcome in 90 days",
+              "fieldLabel": "Desired outcome in 90 days",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.4,
+      "position": [
+        -352,
+        640
+      ],
+      "id": "f768cb81-0180-4d84-a809-76420735813e",
+      "name": "On form submission",
+      "webhookId": "6b79b19b-ee46-4bb4-b56b-6fb341ab80d6"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=student name = {{ $json['first name'] }} {{ $json['last name'] }}\nbusiness name / size: {{ $json['business name '] }} / {{ $json['team size'] }}\nGoal: {{ $json['main goal for joining'] }}\nDesired outcome in 90 days: {{ $json['desired outcome in 90 days'] }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are Mr. Friendly and Nice, an onboarding AI agent whose job is to warmly welcome new students who have just joined the program and created their account.\n\nYou will be provided with information about the student. Your task is to generate a friendly email formatted as a JSON object with exactly two fields:\n1. **subject** — a short, engaging, and personalized subject line.\n2. **Body** — a warm, funny, and encouraging email body.\n\n### Your goals:\n- Greet the student by name.\n- Make a lighthearted, funny joke that compliments them or their business.\n- Express excitement about their journey and reinforce that if they put in the work and use the program’s resources, they can achieve their goals within 90 days.\n- End with an upbeat, motivational note.\n\nOutput Format:\nReturn only valid JSON following this structure:\n```json\n{\n  \"subject\": \"string\",\n  \"body\": \"string\"\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -144,
+        640
+      ],
+      "id": "47c9049e-d09d-4c14-a481-d3ff0f2b3b76",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        848
+      ],
+      "id": "f17dd9d6-87e5-48da-a50c-c1c38e8c0a5e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "5zqhrsLwA35p0zhR",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"Subject\": \"text\",\n  \"Body\": \"text\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        32,
+        848
+      ],
+      "id": "2a1543ee-4f58-4fc6-96d1-732a28f3fcb0",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json['Email address'] }}",
+        "subject": "={{ $json.output.Subject }}",
+        "emailType": "text",
+        "message": "={{ $json.output.Body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        640
+      ],
+      "id": "a5b673c2-6b97-4827-bf5c-55e1a2772183",
+      "name": "Send a message4",
+      "webhookId": "f9474deb-754d-4104-b307-499dcb5cd773",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "onheqjW4YxVJ0gov",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8",
+          "mode": "list",
+          "cachedResultName": "CRM testing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ykNW54bO3lY-M01TXPIkPLcdSEp8vLLC3iTnKs02lu8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('On form submission').item.json['Email address'] }}",
+            "status": "account created",
+            "first follow up": "N/A",
+            "human takeover": "N/A"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full name",
+              "displayName": "Full name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "phn no. ",
+              "displayName": "phn no. ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "payment date",
+              "displayName": "payment date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "first follow up",
+              "displayName": "first follow up",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "human takeover",
+              "displayName": "human takeover",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        640
+      ],
+      "id": "f677715f-976c-48d6-99a6-037e53407da7",
+      "name": "Update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "URFUUt3X63QeJpxB",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0A7G2S8PM5",
+          "mode": "id"
+        },
+        "text": "=👋 New client onboarded!\n\nName:{{ $('On form submission').item.json['first name'] }} {{ $('On form submission').item.json['last name'] }}\nBusiness Name & Size:{{ $('On form submission').item.json['business name '] }} / {{ $('On form submission').item.json['team size'] }}\nGoal: {{ $('On form submission').item.json['main goal for joining'] }}\n\nA welcome email has been sent with next steps!",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        624,
+        640
+      ],
+      "id": "3c66a3b6-d843-4f21-a413-3fab275bc19c",
+      "name": "Send a message5",
+      "webhookId": "9fd665ab-cbca-42d1-b6fb-e95ddfc7d7c4",
+      "credentials": {
+        "slackApi": {
+          "id": "MsGphb6lVcYcFQNM",
+          "name": "Slack account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTViODViZWQyNzNiZWNjOTBjMTI0NDciLCJpYXQiOjE3Njc2MDU2OTR9.S3EIMDsiTJWotKzfXbPMaYQY5NUicMy2MJhrBOwnArY",
+            "user-agent": "PostmanRuntime/7.49.1",
+            "accept": "*/*",
+            "cache-control": "no-cache",
+            "postman-token": "09013de7-49fe-4a76-b791-f2bbb5208373",
+            "host": "localhost:5678",
+            "accept-encoding": "gzip, deflate, br",
+            "connection": "keep-alive",
+            "content-type": "multipart/form-data; boundary=--------------------------433969313267119566316007",
+            "content-length": "529"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "firstname": "akash",
+            "lastname": "tyagi",
+            "email": "akashtyagi780251@gmail.com",
+            "ph no. ": "873287632764"
+          },
+          "webhookUrl": "http://localhost:5678/webhook-test/3786c9d8-b01c-448f-a328-f1291ebcf5c7",
+          "executionMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Send a message": [
+      {
+        "json": {
+          "id": "19ba8ae2bb1520d4",
+          "threadId": "19ba8ae2bb1520d4",
+          "labelIds": [
+            "SENT"
+          ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Append row in sheet": [
+      {
+        "json": {
+          "Full name": "akashtyagi",
+          "Email": "akashtyagi780251@gmail.com",
+          "phn no. ": "873287632764",
+          "status": "account creation",
+          "payment date": "2026-01-10",
+          "first follow up": "2026-01-13",
+          "human takeover": "2026-01-15"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Send a message1": [
+      {
+        "json": {
+          "ok": true,
+          "channel": "C0A7G2S8PM5",
+          "message": {
+            "user": "U0A7R3K9R9R",
+            "type": "message",
+            "ts": "1768061560.928179",
+            "bot_id": "B0A8ACKFMRP",
+            "app_id": "A0A8ADR68TT",
+            "text": "new student has paid on 2026-01-10 11:12:40\n\nakash\ntyagi is being onboarding now...\n\n---------------------------------------------------------------------",
+            "team": "T0A8RQU0QGG",
+            "bot_profile": {
+              "id": "B0A8ACKFMRP",
+              "app_id": "A0A8ADR68TT",
+              "user_id": "U0A7R3K9R9R",
+              "name": "testing-n8n",
+              "icons": {
+                "image_36": "https://a.slack-edge.com/80588/img/plugins/app/bot_36.png",
+                "image_48": "https://a.slack-edge.com/80588/img/plugins/app/bot_48.png",
+                "image_72": "https://a.slack-edge.com/80588/img/plugins/app/service_72.png"
+              },
+              "deleted": false,
+              "updated": 1768027644,
+              "team_id": "T0A8RQU0QGG"
+            },
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "jmDI=",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "new student has paid on 2026-01-10 11:12:40\n\nakash\ntyagi is being onboarding now...\n\n---------------------------------------------------------------------"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "message_timestamp": "1768061560.928179"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Send a message2": [
+      {
+        "json": {
+          "id": "19ba8aeba01da4f9",
+          "threadId": "19ba8aeba01da4f9",
+          "labelIds": [
+            "SENT"
+          ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Get row(s) in sheet": [
+      {
+        "json": {
+          "row_number": 3,
+          "Full name": "akashtyagi",
+          "Email": "akashtyagi780251@gmail.com",
+          "phn no. ": 873287632764,
+          "status": "account creation",
+          "payment date": "2026-01-10",
+          "first follow up": "2026-01-13",
+          "human takeover": "2026-01-15"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Get row(s) in sheet1": [
+      {
+        "json": {
+          "row_number": 2,
+          "Full name": "akashtyagi",
+          "Email": "akashtyagi780251@gmail.com",
+          "phn no. ": 873287632764,
+          "status": "first follow up sent",
+          "payment date": "2026-01-10",
+          "first follow up": "N/A",
+          "human takeover": "2026-01-15"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Update row in sheet": [
+      {
+        "json": {
+          "status": "first follow up sent",
+          "Email": "akashtyagi780251@gmail.com",
+          "first follow up": "N/A"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Update row in sheet1": [
+      {
+        "json": {
+          "Email": "akashtyagi780251@gmail.com",
+          "status": "human notified",
+          "human takeover": "n/a"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Send a message3": [
+      {
+        "json": {
+          "ok": true,
+          "channel": "C0A7G2S8PM5",
+          "message": {
+            "user": "U0A7R3K9R9R",
+            "type": "message",
+            "ts": "1768062278.124109",
+            "bot_id": "B0A8ACKFMRP",
+            "app_id": "A0A8ADR68TT",
+            "text": "it has been 5 days since  akashtyagi paid and they don't create account yet.\n\nplease reach out\n----------------------------------------\n_Automated with this <http://localhost:5678/workflow/eshbWmHp2tqiy6e1hoafg?utm_source=n8n-internal&amp;utm_medium=powered_by&amp;utm_campaign=n8n-nodes-base.slack_c59a7001497d386861a89ff718079e534e54dda5fe82889da4cd9eb9b9136bfb|n8n workflow>_",
+            "team": "T0A8RQU0QGG",
+            "bot_profile": {
+              "id": "B0A8ACKFMRP",
+              "app_id": "A0A8ADR68TT",
+              "user_id": "U0A7R3K9R9R",
+              "name": "testing-n8n",
+              "icons": {
+                "image_36": "https://a.slack-edge.com/80588/img/plugins/app/bot_36.png",
+                "image_48": "https://a.slack-edge.com/80588/img/plugins/app/bot_48.png",
+                "image_72": "https://a.slack-edge.com/80588/img/plugins/app/service_72.png"
+              },
+              "deleted": false,
+              "updated": 1768027644,
+              "team_id": "T0A8RQU0QGG"
+            },
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "WK5o",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "text",
+                        "text": "it has been 5 days since  akashtyagi paid and they don't create account yet.\n\nplease reach out\n----------------------------------------\n"
+                      },
+                      {
+                        "type": "text",
+                        "text": "Automated with this ",
+                        "style": {
+                          "italic": true
+                        }
+                      },
+                      {
+                        "type": "link",
+                        "url": "http://localhost:5678/workflow/eshbWmHp2tqiy6e1hoafg?utm_source=n8n-internal&amp;utm_medium=powered_by&amp;utm_campaign=n8n-nodes-base.slack_c59a7001497d386861a89ff718079e534e54dda5fe82889da4cd9eb9b9136bfb",
+                        "text": "n8n workflow",
+                        "style": {
+                          "italic": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "message_timestamp": "1768062278.124109"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "AI Agent": [
+      {
+        "json": {
+          "output": {
+            "Subject": "Welcome, Akash! Ready to 3x that AI magic?",
+            "Body": "Hey Akash,\n\nWelcome to the program! We're absolutely thrilled to have you and the \"AI / World Academy\" team (11-15 strong, nice!) on board. With your goal of scaling and growing, I can tell you're already operating at a high frequency. Just make sure your revenue isn't experiencing any \"system errors\" – we're here to debug that and get it running at 3x speed!\n\nWe're genuinely excited to see you crush your goal of tripling revenue in just 90 days. It's ambitious, yes, but with the dedication we know you'll bring and all the resources available in this program, it's totally within reach. Think of us as your personal growth algorithm – optimized for success!\n\nGet ready to dive in, learn, implement, and watch your business soar. The next 90 days are going to be epic!\n\nWarmly,\n\nMr. Friendly and Nice"
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Send a message4": [
+      {
+        "json": {
+          "id": "19ba907c4ede922a",
+          "threadId": "19ba907c4ede922a",
+          "labelIds": [
+            "SENT"
+          ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Update row in sheet2": [
+      {
+        "json": {
+          "Email": "akashtyagi780251@gmail.com",
+          "status": "account created",
+          "first follow up": "N/A",
+          "human takeover": "N/A"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Send a message5": [
+      {
+        "json": {
+          "ok": true,
+          "channel": "C0A7G2S8PM5",
+          "message": {
+            "user": "U0A7R3K9R9R",
+            "type": "message",
+            "ts": "1768067420.327699",
+            "bot_id": "B0A8ACKFMRP",
+            "app_id": "A0A8ADR68TT",
+            "text": ":wave: New client onboarded!\n\nName:akash tyagi\nBusiness Name &amp; Size:ai / world academy / 11-15\nGoal: scaling and griwing\n\nA welcome email has been sent with next steps!\n_Automated with this <http://localhost:5678/workflow/eshbWmHp2tqiy6e1hoafg?utm_source=n8n-internal&amp;utm_medium=powered_by&amp;utm_campaign=n8n-nodes-base.slack_c59a7001497d386861a89ff718079e534e54dda5fe82889da4cd9eb9b9136bfb|n8n workflow>_",
+            "team": "T0A8RQU0QGG",
+            "bot_profile": {
+              "id": "B0A8ACKFMRP",
+              "app_id": "A0A8ADR68TT",
+              "user_id": "U0A7R3K9R9R",
+              "name": "testing-n8n",
+              "icons": {
+                "image_36": "https://a.slack-edge.com/80588/img/plugins/app/bot_36.png",
+                "image_48": "https://a.slack-edge.com/80588/img/plugins/app/bot_48.png",
+                "image_72": "https://a.slack-edge.com/80588/img/plugins/app/service_72.png"
+              },
+              "deleted": false,
+              "updated": 1768027644,
+              "team_id": "T0A8RQU0QGG"
+            },
+            "blocks": [
+              {
+                "type": "rich_text",
+                "block_id": "ilyJ",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
+                    "elements": [
+                      {
+                        "type": "emoji",
+                        "name": "wave",
+                        "unicode": "1f44b"
+                      },
+                      {
+                        "type": "text",
+                        "text": " New client onboarded!\n\nName:akash tyagi\nBusiness Name & Size:ai / world academy / 11-15\nGoal: scaling and griwing\n\nA welcome email has been sent with next steps!\n"
+                      },
+                      {
+                        "type": "text",
+                        "text": "Automated with this ",
+                        "style": {
+                          "italic": true
+                        }
+                      },
+                      {
+                        "type": "link",
+                        "url": "http://localhost:5678/workflow/eshbWmHp2tqiy6e1hoafg?utm_source=n8n-internal&amp;utm_medium=powered_by&amp;utm_campaign=n8n-nodes-base.slack_c59a7001497d386861a89ff718079e534e54dda5fe82889da4cd9eb9b9136bfb",
+                        "text": "n8n workflow",
+                        "style": {
+                          "italic": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "message_timestamp": "1768067420.327699"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message2": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Send a message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message3": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message4": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Send a message5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "5e47cc69-4156-4e48-a716-4bb8b53f0e38",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c59a7001497d386861a89ff718079e534e54dda5fe82889da4cd9eb9b9136bfb"
+  },
+  "id": "eshbWmHp2tqiy6e1hoafg",
+  "tags": []
+}
